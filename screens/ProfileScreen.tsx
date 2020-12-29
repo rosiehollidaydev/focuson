@@ -1,48 +1,39 @@
-import * as Facebook from 'expo-facebook';
+import { AccessToken, LoginManager } from 'react-native-fbsdk';
 
-import {
-  AuthRequestConfig,
-  DiscoveryDocument,
-  makeRedirectUri,
-  useAuthRequest
-} from 'expo-auth-session'
-import { Button, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React , { useContext, useEffect, useState }  from 'react';
-
-const discovery: DiscoveryDocument = {
-  authorizationEndpoint: 'https://www.facebook.com/v6.0/dialog/oauth',
-  tokenEndpoint: 'https://graph.facebook.com/v6.0/oauth/access_token'
-}
-
-const config: AuthRequestConfig = {
-  clientId: '455228658973642',
-  scopes: ['public_profile', 'user_likes'],
-  redirectUri: makeRedirectUri({
-    native: 'fb455228658973642://authorize',
-    useProxy:true
-  }),
-  extraParams: {
-    display: Platform.select({ web: 'popup' })!
-  }
-}
+import { Button } from 'react-native';
+import React from 'react';
+import auth from '@react-native-firebase/auth';
 
 export default function App() {
-  const [request, response, promptAsync] = useAuthRequest(config, discovery)
 
-  return (
-    <View style={styles.container}>
-    <Button onPress={() => promptAsync({ useProxy:true })} title="Login" />
-    <Text>{JSON.stringify(response, undefined, 2)}</Text>
-
-  </View>
-  )
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
+  async function onFacebookButtonPress() {
+    // Attempt login with permissions
+    const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+  
+    if (result.isCancelled) {
+      throw 'User cancelled the login process';
+    }
+  
+    // Once signed in, get the users AccesToken
+    const data = await AccessToken.getCurrentAccessToken();
+  
+    if (!data) {
+      throw 'Something went wrong obtaining access token';
+    }
+  
+    // Create a Firebase credential with the AccessToken
+    const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
+  
+    // Sign-in the user with the credential
+    return auth().signInWithCredential(facebookCredential);
   }
-})
+  
+ 
+    return (
+      <Button
+        title="Facebook Sign-In"
+        onPress={() => onFacebookButtonPress().then(() => console.log('Signed in with Facebook!'))}
+      />
+    );
+  
+};
