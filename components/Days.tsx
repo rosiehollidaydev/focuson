@@ -4,6 +4,7 @@ import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { Component } from 'react';
 import { loadSettings, saveSettings } from '../storage/settingsStorage';
 
+import  Item  from "../components/Item";
 import moment from 'moment';
 
 //import { Constants } from 'expo';
@@ -25,18 +26,29 @@ export default class App extends Component {
 		}, 1); // scroll view position fix
 	}
 	
+	async componentDidUpdate() {
+		const initialState = await loadSettings();
+		this.setState(initialState);
+		}
+
 	render() {
 		const today = this.state.currentDate;
 		let days = [];
 		for (let i = 0; i < 7; i++) {
 			const day = moment(today).add(i, 'days').format('dddd');
+			const date = moment(today).add(i, 'days').format('yyyy-MM-DD');
+
 			days.push(
 				<View
 					style={[styles.card, i % 2 == 0 ? styles.view : styles.view2]}
 					key={i}>
 					<View style={styles.cardContent}>
 						<Text style={[styles.dayName,  i % 2 == 0 ? styles.blue : styles.white]}>{day}</Text>
-						
+						<ScrollView style={styles.scrollView}>
+						{this.state.todos.map((todo, index) => (
+							<Item currentDate={date} dueDate={todo.dueDate} id={i} name={todo.textValue} completed={todo.completed}></Item>
+						))}
+						</ScrollView>
 					</View>
 				</View>
 			);
