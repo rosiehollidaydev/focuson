@@ -1,12 +1,6 @@
-/** @format */
-
-import * as ImagePicker from 'expo-image-picker';
-
 import {
 	Button,
-	Image,
 	Keyboard,
-	Platform,
 	ScrollView,
 	StyleSheet,
 	Text,
@@ -14,40 +8,80 @@ import {
 	TouchableOpacity,
 	View,
 } from 'react-native';
-import React, { Component, useState } from 'react';
 import { loadSettings, saveSettings } from '../storage/settingsStorage';
 
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { Ionicons } from '@expo/vector-icons';
+import DatePicker from 'simple-react-native-datepicker';
+import DateTimePicker from 'simple-react-native-datepicker';
+import React from 'react';
 
 export default class AddForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-            todos: [],
+			id: Number,
+			textValue: '',
+			completed: false,
+			dueDate: new Date(),
+			dueTime: '',
+			todos: [],
+			visible: false,
+			dateStr: '', 
 		};
+		this.handleTitleChange = this.handleTitleChange.bind(this);
+		this.handleDateChange = this.handleDateChange.bind(this);
 	}
-    todo={
-        id:'',
-        textValue:'',
-        completed:false,
-        dueDate:''
-    }
-    
+
+	handleTitleChange(name: string) {
+		this.setState({ textValue: name });
+	}
+
+	handleDateChange(date: Date) {
+		this.setState({ dueDate: date });
+	}
+
 	async componentDidMount() {
 		const initialState = await loadSettings();
-        this.setState(initialState);
-        console.log("todos", this.state.todos);
-    }
+		this.setState(initialState);
+		console.log('todos', this.state.todos);
+	}
 
-    handleSubmit = () => {
-        this.setState({todos:[...this.state.todos, {id:Math.random(), textValue:'hello', completed:false}]})
-        console.log(this.state.todos);
-        saveSettings(this.state);
-    }
-    
-	
+	handleSubmit = () => {
+		this.setState({
+			todos: [
+				...this.state.todos,
+				{
+					id: Math.random(),
+					textValue: this.state.textValue,
+					completed: this.state.completed,
+					dueDate: this.state.dueDate,
+					dueTime: this.state.dueTime,
+				},
+			],
+		});
+		console.log(this.state.todos);
+		this.setState({
+			id: '',
+			textValue: '',
+			completed: false,
+			dueDate: new Date(),
+			dueTime: '',
+		});
+		saveSettings(this.state);
+	};
+	public showDatePicker() {
+		this.setState({ visible: true });
+	  }
+	 
+	  public onDateChange(dateStr?: string, date?: Date) {
+		if (dateStr === undefined) {
+		  dateStr = 'canceled';
+		}
+		this.setState({ dateStr, dueDate: date, visible: false });
+	  }
+
+	date = new Date();
 	render() {
+
 		return (
 			<View style={styles.container}>
 				<View>
@@ -59,10 +93,17 @@ export default class AddForm extends React.Component {
 						<TextInput
 							style={styles.textInput}
 							maxLength={20}
-                            onBlur={Keyboard.dismiss}
-                            value={this.todo.textValue}
-						/>
+							onBlur={Keyboard.dismiss}
+							value={this.state.textValue}
+							onChangeText={this.handleTitleChange}
+						/>						
 					</View>
+					<Button onPress={() => this.showDatePicker()} title='Pick a due date' />
+						<DatePicker
+							visible={this.state.visible}
+							onDateChange={(dateStr, dueDate) => this.onDateChange(dateStr, dueDate)}
+							date={this.state.dueDate}
+						/>
 				</ScrollView>
 				<View style={styles.inputContainer}>
 					<TouchableOpacity

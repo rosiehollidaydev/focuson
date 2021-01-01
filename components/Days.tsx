@@ -24,7 +24,7 @@ export default class App extends Component {
 			this.scrollView.scrollTo({ x: -30 });
 		}, 1); // scroll view position fix
 	}
-
+	
 	render() {
 		const today = this.state.currentDate;
 		let days = [];

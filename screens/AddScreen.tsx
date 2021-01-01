@@ -11,7 +11,7 @@ import { StyleSheet } from 'react-native';
 export default function HomeScreen() {
   return (
     <View  style={{ flex:1, flexDirection:'column', backgroundColor:'white' }}>
-      <AddForm/>
+      <AddForm/> 
     </View>
   );
 }
