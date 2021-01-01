@@ -6,18 +6,16 @@ import { StatusBar } from 'expo-status-bar';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 
-const useProxy = Constants.appOwnership === 'expo' && false
-
 export default function App() {
+ 
   const isLoadingComplete = useCachedResources();
-  const colorScheme = useColorScheme();
 
   if (!isLoadingComplete) {
     return null;
   } else {
     return (
       <SafeAreaProvider>
-        <Navigation colorScheme={colorScheme} />
+        <Navigation  />
         <StatusBar />
       </SafeAreaProvider>
     );
