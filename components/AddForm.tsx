@@ -14,6 +14,7 @@ import { loadSettings, saveSettings } from '../storage/settingsStorage';
 
 import DatePicker from 'react-native-datepicker';
 import React from 'react';
+import moment from 'moment';
 
 export default class AddForm extends React.Component {
 	constructor(props) {
@@ -22,52 +23,50 @@ export default class AddForm extends React.Component {
 			id: 0,
 			textValue: '',
 			completed: false,
-			dueDate: new Date(),
+			dueDate:  moment().toDate(),
 			dueTime: '',
 			todos: [],
 			visible: false,
 			dateStr: '',
 		};
-		this.handleTitleChange = this.handleTitleChange.bind(this);
-	}
-
-	handleTitleChange(name: string) {
-		this.setState({ textValue: name });
 	}
 
 	async componentDidMount() {
 		const initialState = await loadSettings();
 		this.setState(initialState);
-		console.warn('todos', this.state.todos);
+		this.setState({ dueDate :  moment(moment().toDate()).format('DD-MM-YYYY')})
+		this.setState({ textValue : '' })
 	}
+
 
 	handleSubmit = () => {
 		if (this.state.textValue === '') {
 			console.error('No text');
 		} else {
-			this.setState({
-				todos: [
-					...this.state.todos,
-					{
-						id: Math.random(),
-						textValue: this.state.textValue,
-						completed: this.state.completed,
-						dueDate: this.state.dueDate,
-						dueTime: this.state.dueTime,
-					},
-				],
+			let todos = this.state.todos;
+			todos.push({
+				id: Math.random(),
+				textValue: this.state.textValue,
+				completed: this.state.completed,
+				dueDate: this.state.dueDate,
+				dueTime: this.state.dueTime,
 			});
-			console.log(this.state.todos);
-			this.setState({
-				id: '',
-				textValue: '',
-				completed: false,
-				dueDate: new Date(),
-				dueTime: '',
-			});
+			this.setState({ todos });
+			console.log("todos", todos);
 			saveSettings(this.state);
+			this.setState({ textValue:''} );
+			this.setState({ dueDate :  moment(moment().toDate()).format('DD-MM-YYYY')})
 		}
 	};
+
+	clearTodos = () => {
+		this.setState({ todos: [] });
+		this.setState({		
+			textValue: '',
+			dueDate:moment()
+		});
+		saveSettings(this.state);
+	};	
 
 	date = new Date();
 	render() {
@@ -84,7 +83,7 @@ export default class AddForm extends React.Component {
 							maxLength={20}
 							onBlur={Keyboard.dismiss}
 							value={this.state.textValue}
-							onChangeText={this.handleTitleChange}
+							onChangeText={(textValue) => this.setState({ textValue })}
 						/>
 					</View>
 					<DatePicker
@@ -106,8 +105,9 @@ export default class AddForm extends React.Component {
 								marginLeft: 36,
 							},
 						}}
-						onDateChange={(dueDate) => {
-							this.setState({ dueDate: dueDate });
+						onDateChange={(date) => {
+							console.log('selected date ', date);
+							this.setState({ dueDate : date });
 						}}
 					/>
 				</ScrollView>
@@ -116,6 +116,11 @@ export default class AddForm extends React.Component {
 						style={styles.saveButton}
 						onPress={this.handleSubmit}>
 						<Text style={styles.saveButtonText}>Save</Text>
+					</TouchableOpacity>
+				</View>
+				<View style={styles.inputContainer}>
+					<TouchableOpacity style={styles.saveButton} onPress={this.clearTodos}>
+						<Text style={styles.saveButtonText}>Clear Todos</Text>
 					</TouchableOpacity>
 				</View>
 			</View>

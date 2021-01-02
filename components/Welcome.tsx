@@ -10,7 +10,8 @@ export default class Welcome extends React.Component {
 		const initialState = await loadSettings();
 
 		this.setState(initialState);
-    }
+	}
+	
 
     async componentDidUpdate(){
         const initialState = await loadSettings();
@@ -24,7 +25,6 @@ export default class Welcome extends React.Component {
         this.state = { name: '', image: '' };
 
 	}
-
 	render() {
 		return (
 			<View style={styles.container}>
@@ -32,11 +32,20 @@ export default class Welcome extends React.Component {
 					source={require('../assets/images/bg.png')}
 					style={styles.image}
                     ></Image>
-
+						{
+						this.state.image !== '' &&
 						<Image
 							style={styles.profileImage}
 							source={{ uri: this.state.image }}
 						/>
+						}
+						{
+						this.state.image === '' &&
+						<Image
+							style={styles.profileImage}
+							source={require('../assets/images/default.jpg') }
+						/>
+						}
 						<Text style={styles.text}>
 							<Text style={styles.hey}>Hey, </Text>
 							<Text style={styles.name}>{this.state.name}</Text>

@@ -5,8 +5,8 @@ import React, { useState } from 'react';
 
 const Item = (props) => {
 	const [isSelected, setSelection] = useState(false);
-    if(props.dueDate.toString().substring(0,10) == props.currentDate.toString().substring(0,10)
-    && props.name != '')
+    if(props.dueDate.toString().substring(0,10) == props.currentDate.toString().substring(0,10) &&
+     props.name != '')
     {
         return  ( 
             
@@ -26,16 +26,16 @@ const Item = (props) => {
         
         )
     }
-    else{
-        return(
-            <></>
-        )  
-    }
+     else{
+         return(
+             <></>
+         )  
+     }
 }
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
-		alignItems: 'center',
+        flex: 1,
+        height:80,
 		justifyContent: 'center',
 	},
 	checkboxContainer: {

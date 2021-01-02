@@ -4,7 +4,7 @@ import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { Component } from 'react';
 import { loadSettings, saveSettings } from '../storage/settingsStorage';
 
-import  Item  from "../components/Item";
+import Item from '../components/Item';
 import moment from 'moment';
 
 //import { Constants } from 'expo';
@@ -15,7 +15,7 @@ export default class App extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = { name: '', image: '', currentDate: new Date(), todos: [] };
+		this.state = { currentDate: new Date(), todos: [] };
 	}
 
 	async componentDidMount() {
@@ -25,29 +25,43 @@ export default class App extends Component {
 			this.scrollView.scrollTo({ x: -30 });
 		}, 1); // scroll view position fix
 	}
-	
+
 	async componentDidUpdate() {
 		const initialState = await loadSettings();
 		this.setState(initialState);
-		}
+	}
+
+	onScreenFocus = () => {
+		// Screen was focused, our on focus logic goes here
+		this.componentDidMount()
+	  }
 
 	render() {
 		const today = this.state.currentDate;
 		let days = [];
 		for (let i = 0; i < 7; i++) {
 			const day = moment(today).add(i, 'days').format('dddd');
-			const date = moment(today).add(i, 'days').format('yyyy-MM-DD');
+			const date = moment(today).add(i, 'days').format('DD-MM-YYYY');
 
 			days.push(
 				<View
 					style={[styles.card, i % 2 == 0 ? styles.view : styles.view2]}
 					key={i}>
 					<View style={styles.cardContent}>
-						<Text style={[styles.dayName,  i % 2 == 0 ? styles.blue : styles.white]}>{day}</Text>
-						<ScrollView style={styles.scrollView}>
-						{this.state.todos.map((todo, index) => (
-							<Item currentDate={date} dueDate={todo.dueDate} id={i} name={todo.textValue} completed={todo.completed}></Item>
-						))}
+						<Text
+							style={[styles.dayName, i % 2 == 0 ? styles.blue : styles.white]}>
+							{day}
+						</Text>
+						<ScrollView>
+							{this.state.todos.map((todo, key) => (
+								<Item
+									key={key}
+									currentDate={date}
+									dueDate={todo.dueDate}
+									id={i}
+									name={todo.textValue}
+									completed={todo.completed}></Item>
+							))}
 						</ScrollView>
 					</View>
 				</View>
@@ -83,7 +97,7 @@ const styles = StyleSheet.create({
 		height: '80%',
 	},
 	card: {
-		height: '75%',
+		height: '80%',
 		borderRadius: 40,
 		borderColor: 'grey',
 		marginTop: 100,
@@ -105,17 +119,18 @@ const styles = StyleSheet.create({
 	view2: {
 		backgroundColor: '#071A52',
 	},
-	white:{
-		color:'white'
+	white: {
+		color: 'white',
 	},
-	blue:{
-		color:'#071A52'
+	blue: {
+		color: '#071A52',
 	},
 	cardContent: {
-		height:'100%',
-		padding:30
+		height: '100%',
+		padding: 30,
 	},
-	dayName:{
-		fontSize:20,
-	}
+	dayName: {
+		fontSize: 20,
+		paddingBottom:40
+	},
 });

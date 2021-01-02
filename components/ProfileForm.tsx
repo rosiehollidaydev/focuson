@@ -53,6 +53,12 @@ export default class ProfileForm extends React.Component {
 		this.setState({image : pickerResult.uri})
 		}
 	};
+
+	clearAllState = () => {
+		this.setState({ name: '' , image:'' });
+		saveSettings(this.state);
+	};
+
 	
 	render() {
 		return (
@@ -82,6 +88,13 @@ export default class ProfileForm extends React.Component {
 						style={styles.saveButton}
 						onPress={this.handleSubmit}>
 						<Text style={styles.saveButtonText}>Save</Text>
+					</TouchableOpacity>
+				</View>
+				<View style={styles.inputContainer}>
+					<TouchableOpacity
+						style={styles.saveButton}
+						onPress={this.clearAllState}>
+						<Text style={styles.saveButtonText}>Clear All State</Text>
 					</TouchableOpacity>
 				</View>
 			</View>
