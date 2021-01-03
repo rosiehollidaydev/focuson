@@ -20,8 +20,8 @@ export default function BottomTabNavigator() {
     <BottomTab.Navigator
       initialRouteName="Home"
       tabBarOptions={{ 
-        inactiveTintColor: '#031E4D', 
-        activeTintColor: '#062966',
+        inactiveTintColor: '#EB7100', 
+        activeTintColor: '#EB7100',
         showLabel:false, 
       style: {
         backgroundColor: '#fff',
@@ -39,7 +39,7 @@ export default function BottomTabNavigator() {
         name="Add"
         component={AddNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="add-circle" size={80} color={'#16B978'} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="add-circle" size={80} color={'#8AE8FF'} />,
         }}
       />
       <BottomTab.Screen

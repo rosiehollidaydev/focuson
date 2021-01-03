@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
 		height: '80%',
 		borderRadius: 40,
 		borderColor: 'grey',
-		marginTop: 100,
+		marginTop: 50,
 		width: width - 150,
 		margin: 10,
 		shadowColor: '#000',
@@ -117,13 +117,13 @@ const styles = StyleSheet.create({
 		backgroundColor: 'white',
 	},
 	view2: {
-		backgroundColor: '#071A52',
+		backgroundColor: '#8AE8FF',
 	},
 	white: {
 		color: 'white',
 	},
 	blue: {
-		color: '#071A52',
+		color: '#8AE8FF',
 	},
 	cardContent: {
 		height: '100%',

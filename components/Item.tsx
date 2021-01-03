@@ -1,7 +1,10 @@
 /** @format */
 
-import { CheckBox, StyleSheet, Text, View } from 'react-native';
 import React, { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+
+import CheckBox from '@react-native-community/checkbox';
+import Checkbox from '@react-native-community/checkbox';
 
 const Item = (props) => {
 	const [isSelected, setSelection] = useState(false);

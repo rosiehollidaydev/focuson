@@ -13,6 +13,7 @@ import {
 import { loadSettings, saveSettings } from '../storage/settingsStorage';
 
 import DatePicker from 'react-native-datepicker';
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import moment from 'moment';
 
@@ -72,22 +73,18 @@ export default class AddForm extends React.Component {
 	render() {
 		return (
 			<View style={styles.container}>
-				<View>
-					<Text style={styles.header}>Add a new item</Text>
-				</View>
-				<ScrollView>
+				<ScrollView style={styles.scrollView}>
 					<View style={styles.inputContainer}>
-						<Text>What do you need to do?</Text>
 						<TextInput
 							style={styles.textInput}
-							maxLength={20}
+							placeholder='What do you need to do?'
 							onBlur={Keyboard.dismiss}
 							value={this.state.textValue}
 							onChangeText={(textValue) => this.setState({ textValue })}
 						/>
 					</View>
 					<DatePicker
-						style={{ width: 200 }}
+						style={{ width: '80%', alignSelf:'center'}}
 						date={this.state.dueDate}
 						mode='date'
 						placeholder='select date'
@@ -96,13 +93,13 @@ export default class AddForm extends React.Component {
 						cancelBtnText='Cancel'
 						customStyles={{
 							dateIcon: {
-								position: 'absolute',
-								left: 0,
-								top: 4,
-								marginLeft: 0,
+								display:'none'
 							},
 							dateInput: {
-								marginLeft: 36,
+								backgroundColor:'white',
+								marginTop:20,
+								height:50,
+								borderRadius:10,
 							},
 						}}
 						onDateChange={(date) => {
@@ -110,19 +107,20 @@ export default class AddForm extends React.Component {
 							this.setState({ dueDate : date });
 						}}
 					/>
-				</ScrollView>
-				<View style={styles.inputContainer}>
+						<View style={styles.inputContainer}>
 					<TouchableOpacity
 						style={styles.saveButton}
 						onPress={this.handleSubmit}>
+							<Ionicons
+								name='save'
+								color='white'
+								size={40}
+								style={{ top: 10, left: 10, position: 'absolute' }}
+							/>
 						<Text style={styles.saveButtonText}>Save</Text>
 					</TouchableOpacity>
 				</View>
-				<View style={styles.inputContainer}>
-					<TouchableOpacity style={styles.saveButton} onPress={this.clearTodos}>
-						<Text style={styles.saveButtonText}>Clear Todos</Text>
-					</TouchableOpacity>
-				</View>
+				</ScrollView>			
 			</View>
 		);
 	}
@@ -130,32 +128,35 @@ export default class AddForm extends React.Component {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
-		paddingTop: 45,
-		backgroundColor: 'white',
+		paddingTop: 50,
+		backgroundColor: 'transparent',
+		justifyContent: 'center',
+		alignItems:'center'
 	},
 	header: {
-		fontSize: 25,
-		textAlign: 'center',
+		fontSize: 40,
+		textAlign: 'left',
 		margin: 10,
 		fontWeight: 'bold',
 	},
 	inputContainer: {
 		paddingTop: 15,
+		alignItems:'center'
 	},
 	textInput: {
-		borderColor: '#CCCCCC',
-		borderTopWidth: 1,
-		borderBottomWidth: 1,
+		borderRadius:10,
+		backgroundColor: 'white',
+		width:'80%',
 		height: 50,
-		fontSize: 25,
-		paddingLeft: 20,
-		paddingRight: 20,
+		fontSize: 18,
+		paddingLeft:10,
+		borderWidth: 2,
+		borderColor:'#8AE8FF'
 	},
 	saveButton: {
-		borderWidth: 1,
-		borderColor: '#007BFF',
-		backgroundColor: '#007BFF',
+		width: '80%',
+		borderColor: '#8AE8FF',
+		backgroundColor: '#8AE8FF',
 		padding: 15,
 		margin: 5,
 	},
@@ -164,18 +165,25 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		textAlign: 'center',
 	},
-	button: {
-		width: 250,
-		height: 60,
-		backgroundColor: '#3740ff',
-		alignItems: 'center',
-		justifyContent: 'center',
-		borderRadius: 4,
-		marginBottom: 12,
+	image: {
+		left: 0,
+		width: 200,
+		height: 200,
+		marginBottom:25
 	},
-	buttonText: {
-		textAlign: 'center',
-		fontSize: 15,
-		color: '#fff',
-	},
+	scrollView:{
+		width:'80%',
+		height:'68%',
+		backgroundColor:'white',
+		borderRadius:40,
+		shadowColor: '#000',
+		shadowOffset: {
+			width: 0,
+			height: 8,
+		},
+		shadowOpacity: 0.44,
+		shadowRadius: 10.32,
+
+		elevation: 16,
+	}
 });

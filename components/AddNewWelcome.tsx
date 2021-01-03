@@ -5,7 +5,7 @@ import { Dimensions, Image, ImageBackground, StyleSheet, Text, View } from 'reac
 import React from 'react';
 import { loadSettings } from '../storage/settingsStorage';
 
-export default class Welcome extends React.Component {
+export default class AddNewWelcome extends React.Component {
 	async componentDidMount() {
 		const initialState = await loadSettings();
 
@@ -47,7 +47,7 @@ export default class Welcome extends React.Component {
 							<Text style={styles.hey}>Hey, </Text>
 							<Text style={styles.name}>{this.state.name}</Text>
 						</Text>
-						<Text style={styles.welcome}>Main focus for today?</Text>
+						<Text style={styles.welcome}>What do you need to add?</Text>
 					</View>
 		);
 	}

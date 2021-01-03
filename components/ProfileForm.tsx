@@ -1,15 +1,18 @@
+/** @format */
+
 import * as ImagePicker from 'expo-image-picker';
 
 import {
 	Button,
 	Image,
+	ImageBackground,
 	Keyboard,
 	ScrollView,
 	StyleSheet,
 	Text,
 	TextInput,
 	TouchableOpacity,
-	View
+	View,
 } from 'react-native';
 import React, { Component } from 'react';
 import { loadSettings, saveSettings } from '../storage/settingsStorage';
@@ -17,25 +20,23 @@ import { loadSettings, saveSettings } from '../storage/settingsStorage';
 import { Ionicons } from '@expo/vector-icons';
 
 export default class ProfileForm extends React.Component {
-
 	async componentDidMount() {
 		const initialState = await loadSettings();
 
 		this.setState(initialState);
 	}
 	handleNameChange(name: string) {
-		this.setState({ name:name });
+		this.setState({ name: name });
 	}
 
-	setImage(uri: string)
-	{
-		this.setState({ image: uri })
+	setImage(uri: string) {
+		this.setState({ image: uri });
 	}
 	constructor(props) {
 		super(props);
 		this.handleSubmit = this.handleSubmit.bind(this);
 
-		this.state = { name: '' , image:''};
+		this.state = { name: '', image: '' };
 
 		this.handleNameChange = this.handleNameChange.bind(this);
 	}
@@ -45,92 +46,103 @@ export default class ProfileForm extends React.Component {
 
 	_pickImage = async () => {
 		let pickerResult = await ImagePicker.launchImageLibraryAsync({
-			
 			allowsEditing: true,
 		});
 		if (!pickerResult.cancelled) {
-
-		this.setState({image : pickerResult.uri})
+			this.setState({ image: pickerResult.uri });
 		}
 	};
 
 	clearAllState = () => {
-		this.setState({ name: '' , image:'' });
+		this.setState({ name: '', image: '' });
 		saveSettings(this.state);
 	};
 
-	
 	render() {
 		return (
 			<View style={styles.container}>
-				<View>
-					<Text style={styles.header}>Profile</Text>
-				</View>
 				<ScrollView>
 					<View style={styles.inputContainer}>
-						<Text>Name</Text>
+						<View
+							style={{
+								flex: 1,
+								alignItems: 'center',
+								justifyContent: 'center',
+							}}>
+							<ImageBackground
+								imageStyle={{ borderRadius: 20, borderColor:'white', borderWidth:5 }}
+								source={{ uri: this.state.image }}
+								style={styles.image}>
+								<Ionicons
+									name='camera-sharp'
+									color='white'
+									size={30}
+									style={{ bottom: 5, right: 5, position: 'absolute' }}
+									onPress={this._pickImage}
+								/>
+							</ImageBackground>
+						</View>
 						<TextInput
 							style={styles.textInput}
 							maxLength={20}
+							placeholder={'Name'}
 							onBlur={Keyboard.dismiss}
 							value={this.state.name}
 							onChangeText={this.handleNameChange}
 						/>
-						<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-							<Button title="Pick an image from camera roll" onPress={this._pickImage} />
-							<Image source={{ uri: this.state.image }} style={{ width: 200, height: 200 }} />
-						</View>
+					</View>
+					<View style={styles.inputContainer}>
+						<TouchableOpacity
+							style={styles.saveButton}
+							onPress={this.handleSubmit}>
+							<Ionicons
+								name='save'
+								color='#8AE8FF'
+								size={40}
+								style={{ top: 10, left: 10, position: 'absolute' }}
+							/>
 
+							<Text style={styles.saveButtonText}>Save</Text>
+						</TouchableOpacity>
 					</View>
 				</ScrollView>
-				<View style={styles.inputContainer}>
-					<TouchableOpacity
-						style={styles.saveButton}
-						onPress={this.handleSubmit}>
-						<Text style={styles.saveButtonText}>Save</Text>
-					</TouchableOpacity>
-				</View>
-				<View style={styles.inputContainer}>
-					<TouchableOpacity
-						style={styles.saveButton}
-						onPress={this.clearAllState}>
-						<Text style={styles.saveButtonText}>Clear All State</Text>
-					</TouchableOpacity>
-				</View>
 			</View>
 		);
 	}
 }
 
-
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
-		paddingTop: 45,
-		backgroundColor: 'white',
+		width: '100%',
+		height: '100%',
+		paddingTop: 135,
+		backgroundColor: 'transparent',
+		justifyContent: 'center',
 	},
 	header: {
-		fontSize: 25,
-		textAlign: 'center',
+		fontSize: 40,
+		textAlign: 'left',
 		margin: 10,
 		fontWeight: 'bold',
 	},
 	inputContainer: {
 		paddingTop: 15,
+		alignItems:'center'
 	},
 	textInput: {
-		borderColor: '#CCCCCC',
-		borderTopWidth: 1,
-		borderBottomWidth: 1,
+		borderRadius:10,
+		backgroundColor: 'white',
+		width:'80%',
 		height: 50,
 		fontSize: 25,
-		paddingLeft: 20,
-		paddingRight: 20,
+		paddingLeft:10,
+		borderWidth: 2,
+		borderColor:'#8AE8FF'
 	},
 	saveButton: {
-		borderWidth: 1,
-		borderColor: '#007BFF',
-		backgroundColor: '#007BFF',
+		width: '80%',
+		borderColor: '#8AE8FF',
+		backgroundColor: '#8AE8FF',
 		padding: 15,
 		margin: 5,
 	},
@@ -139,18 +151,10 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		textAlign: 'center',
 	},
-	button: {
-		width: 250,
-		height: 60,
-		backgroundColor: '#3740ff',
-		alignItems: 'center',
-		justifyContent: 'center',
-		borderRadius: 4,
-		marginBottom:12    
-	  },
-	  buttonText: {
-		textAlign: 'center',
-		fontSize: 15,
-		color: '#fff'
-	  }
+	image: {
+		left: 0,
+		width: 100,
+		height: 100,
+		marginBottom:25
+	},
 });

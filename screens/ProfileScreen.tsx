@@ -1,13 +1,14 @@
+import { Text, View } from 'react-native';
+
+import PageContainer from '../components/PageContainer';
 import ProfileForm from '../components/ProfileForm';
 import React from 'react';
-import { Text } from 'react-native';
 
-export default function App() {
-
- 
- 
+export default function App() { 
     return (
-      <ProfileForm />
-    );
-  
+      <View  style={{ flex:1, flexDirection:'column', backgroundColor:'white' }}>
+      <PageContainer/>
+        <ProfileForm />
+      </View>
+    );  
 };
