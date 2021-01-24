@@ -77,7 +77,7 @@ export default class App extends Component {
 					//pagingEnabled={true}
 					horizontal={true}
 					decelerationRate={0}
-					snapToInterval={width - 60}
+					snapToInterval={width -190 }
 					snapToAlignment={'center'}
 					contentInset={{
 						top: 0,

@@ -13,16 +13,16 @@ const Item = (props) => {
     {
         return  ( 
             
-        <View style={styles.container}>
-            <View style={styles.checkboxContainer}>
+        <View style={ styles.container }>
+            <View style={ styles.checkboxContainer }>
                 <CheckBox
-                    value={props.checked}
-                    onValueChange={setSelection}
-                    style={styles.checkbox}
+                    value={ props.checked }
+                    onValueChange={ setSelection }
+                    style={ styles.checkbox }
                 />
                 <Text
-                    style={[props.id % 2 == 0 ? styles.blue : styles.white, styles.label]}>
-                    {props.name}
+                    style={ [ props.id % 2 == 0 ? styles.blue : styles.white, styles.label ] }>
+                    { props.name }
                 </Text>
             </View>
         </View> 

@@ -69,6 +69,7 @@ export default class ProfileForm extends React.Component {
 								alignItems: 'center',
 								justifyContent: 'center',
 							}}>
+							{this.state.image !== '' &&
 							<ImageBackground
 								imageStyle={{ borderRadius: 20, borderColor:'white', borderWidth:5 }}
 								source={{ uri: this.state.image }}
@@ -81,6 +82,16 @@ export default class ProfileForm extends React.Component {
 									onPress={this._pickImage}
 								/>
 							</ImageBackground>
+								}
+								{this.state.image === '' &&
+								<Ionicons
+								name='camera-sharp'
+								color='white'
+								size={30}
+								style={{ bottom: 5, right: 5, position: 'absolute' }}
+								onPress={this._pickImage}
+							/>
+								}
 						</View>
 						<TextInput
 							style={styles.textInput}
